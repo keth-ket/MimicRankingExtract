@@ -69,7 +69,8 @@ def get_text():
 def readMembers(fileName):
     with open(fileName, "r", encoding="utf-8") as file:
         return {line.strip(): [] for line in file if line.strip()}
-    
+
+#member with name that can only partially scanned due to weird font   
 def nameExist(name, name_map):
     if "NN3" in name:
         return (True, "MNN3")
@@ -84,26 +85,32 @@ def nameExist(name, name_map):
     return (False, "") 
 
 def processData(textData, name_map):   
-    #process every two lines
+    
+    #process everyline
     for i in range(0, len(textData)):
         name = textData[i].strip()
-        
+        #make sure it's not out of bound
         if i + 1 < len(textData):
             value_str = textData[i + 1].strip()
         else:
             continue
         
-        
+        #take only the last word and get rid of , and M
         cleaned_value = value_str.split()[-1].replace(',', '').replace('M', '')
         
+        #the the cleaned value is only digit, our data is good to further process
         if cleaned_value.isdigit():
+            #convert to int for easier comparison
             value = int(cleaned_value)
             # Check if the name exists in the name_map
             exists, matched_name = nameExist(name, name_map)
             if exists:
                 # If name exists, append the value to the corresponding name's list
                 name_map[matched_name].append(value)
-                
+
+#there will be repeated value due to screen short overlaped 
+#might contains wrong value due to noise
+#only take the most repeated value as final result
 def most_repeated_number(name_map):
     result = {}
     
@@ -119,10 +126,11 @@ def most_repeated_number(name_map):
     # Convert sorted result back into a dictionary
     sorted_result_dict = dict(sorted_result)
     
-    return sorted_result_dict
-    return result               
+    return sorted_result_dict              
 
 if __name__ == '__main__':
+    
+    #process video
     vid = files("recordingVideo.mp4")
     process(vid)
     
