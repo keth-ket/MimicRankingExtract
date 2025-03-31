@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Web Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to Ket's Extract_Text Program</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data"> 
+        <label for="video">Choose a recording video file: </label>
+        <input type="file" name="video" accept=".mp4" required>
+        <br>
+        <label for="members">Choose a members file: </label>
+        <input type="file" name="members" accept=".txt" required>
+        <br>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
