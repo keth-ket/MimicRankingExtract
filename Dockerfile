@@ -1,17 +1,31 @@
-# Use an official Python runtime as a parent image
+# Use an official Python base image
 FROM python:3.11-slim
 
-RUN apt-get update && \
-    apt-get -qq -y install tesseract-ocr && \
-    apt-get -qq -y install libtesseract-dev && \
-    apt-get -qq -y install imagemagick libmagickwand-dev && \
-    rm -rf /var/lib/apt/lists/*
-
+# Set working directory in the container
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+# Install system dependencies (for Tesseract, OpenCV, Wand, and ImageMagick)
+RUN apt-get update && \
+    apt-get install -y \
+    tesseract-ocr \
+    libtesseract-dev \
+    imagemagick \
+    libmagickwand-dev \
+    libgl1-mesa-glx \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . .
+# Install Python dependencies
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["gunicorn", "app:app"]
+# Copy the application code
+COPY . /app
+
+# Make sure to download necessary NLTK datasets
+RUN python -m nltk.downloader punkt averaged_perceptron_tagger
+
+# Expose the port that Flask will run on
+EXPOSE 5000
+
+# Command to run the Flask app
+CMD ["python", "app.py"]
