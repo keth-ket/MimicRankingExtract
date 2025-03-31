@@ -208,4 +208,4 @@ def analyzing_everything(video_path, text_path):
     
     return(members_attacked, score_result)
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=10000)  # For example, using port 1000
