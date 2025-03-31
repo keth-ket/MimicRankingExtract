@@ -61,7 +61,6 @@ def upload_file():
         
         members_attacked, score_result = analyzing_everything(video_path, text_path)
         
-     
         # Return a response with links to the uploaded files
         return f"""
             <h2>Data analyzing successfully!</h2>
